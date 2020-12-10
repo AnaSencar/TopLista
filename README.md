@@ -1,6 +1,7 @@
 # TopLista
 U package manager console windowu treba napraviti:
 Update-database -context AppDbContext
+
 Te jos dodatno:
 Update-database -context ZapisiContext
 
