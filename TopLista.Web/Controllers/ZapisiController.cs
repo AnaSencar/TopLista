@@ -24,14 +24,6 @@ namespace TopLista.Web.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet(Name = "GetZapisi")]
-        //public ActionResult<IEnumerable<ZapisViewModel>> GetZapisi([FromQuery] bool selectApproved)
-        //{
-        //    IEnumerable<Zapis> zapisi;
-        //    zapisi = _zapisiRepository.GetZapisi(selectApproved);
-        //    return Ok(_mapper.Map<IEnumerable<ZapisViewModel>>(zapisi));
-        //}
-
         [HttpGet(Name = "GetZapisi")]
         public ActionResult<IEnumerable<ZapisViewModel>> GetZapisi([FromQuery] bool selectApproved, [FromQuery] FilterViewModel filter)
         {

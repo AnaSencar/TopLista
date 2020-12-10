@@ -8,8 +8,7 @@ namespace TopLista.Web.Interfaces
 {
     public interface IZapisiRepository
     {
-        IEnumerable<Zapis> GetZapisi(bool selectApproved);
-        IEnumerable<Zapis> GetFilteredZapisi(bool selectApproved, FilterViewModel filter); //dodano
+        IEnumerable<Zapis> GetFilteredZapisi(bool selectApproved, FilterViewModel filter);
         void AddZapis(Zapis zapis);
         void Save();
         IEnumerable<Zapis> GetUnapprovedZapisi();

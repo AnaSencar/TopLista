@@ -19,7 +19,7 @@ var top_lista = new Vue({
         zapisForCreate: {},
         zapisToDelete: {},
 
-        filter: { //dodano
+        filter: {
             numberOfRecords: 10,
         }
     },
@@ -42,7 +42,7 @@ var top_lista = new Vue({
                 .get('/api/Zapisi', {
                     params: {
                         selectApproved: true,
-                        numberOfRecords: this.filter.numberOfRecords //dodano
+                        numberOfRecords: this.filter.numberOfRecords
                     }
                 })
                 .then(response => {
@@ -51,7 +51,6 @@ var top_lista = new Vue({
                 });
         },
         getLoggedUser() {
-            console.log("User");
             axios
                 .get('/api/LoginApi')
                 .then(response => {

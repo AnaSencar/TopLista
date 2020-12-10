@@ -35,15 +35,6 @@ namespace TopLista.Web.Services
             _context.Zapisi.Remove(zapis);
         }
 
-        public IEnumerable<Zapis> GetZapisi(bool selectApproved)
-        {
-            return _context.Zapisi
-                .OrderBy(x => x.VrijemeUSekundama)
-                .ThenBy(x => x.DatumUnosa)
-                .Where(x => x.Odobreno == selectApproved)
-                .ToList();
-        }
-
         public IEnumerable<Zapis> GetUnapprovedZapisi()
         {
             return _context.Zapisi

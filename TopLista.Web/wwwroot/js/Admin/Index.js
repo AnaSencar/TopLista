@@ -14,7 +14,8 @@
             axios
                 .get('/api/Zapisi', {
                     params: {
-                        selectApproved: false
+                        selectApproved: false,
+                        numberOfRecords: null
                     }
                 })
                 .then(response => {
