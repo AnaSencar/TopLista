@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div id="admin" v-if="showData">
+        <div class="card shadow p-3 mb-5 bg-white rounded">
+            <div class="card-body">
+                <div class="mb-3">
+                    <h2>Novopristigli zapisi</h2>
+                </div>
+                <template v-if="unapprovedZapisi.length > 0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:30%">Ime</th>
+                                <th style="width:30%">Prezime</th>
+                                <th style="width:20%">Vrijeme (h:m:s)</th>
+                                <th style="width:20%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="zapis in unapprovedZapisi">
+                                <td>{{zapis.ime}}</td>
+                                <td>{{zapis.prezime}}</td>
+                                <td>{{zapis.vrijeme}}</td>
+                                <td>
+                                    <button class="btn btn-outline-secondary" v-if="!zapis.approved" @@click="approveZapis(zapis)">
+                                        Odobri
+                                    </button>
+                                    <button class="btn btn-outline-danger" @@click="denyZapisClick(zapis)">
+                                        Obriši
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </template>
+                <template v-else>
+                    Nema novopristiglih zapisa
+                </template>
+            </div>
+        </div>
+
+        <div class="modal fade" id="denyZapis">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Potvrda odbacivanja zapisa
+                    </div>
+                    <div class="modal-body">
+                        Da li ste sigurni da želite odbaciti zapis?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-secondary" @@click="denyZapis()">Potvrdi</button>
+                        <button class="btn btn-outline-danger" @@click="cancelDenyZapisClicked()">Odustani</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script src="~/js/Admin/Index.js?t=20201207"></script>

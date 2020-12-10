@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/js/vue.js"></script>
+    <script src="~/js/axios.min.js"></script>
+    <script src="~/js/lodash.min.js"></script>
+    <script src="~/js/vuelidate.min.js"></script>
+    <script src="~/js/validators.min.js"></script>
+    <script src="~/js/toastr.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="layout" v-if="showData">
+            <nav class="navbar navbar-expand-sm navbar-light navbar-toggleable-sm bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a v-if="!user.isAdmin" class="navbar-brand" href="~/">Top lista</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li :class="checkIndexTab()" v-if="user.isAdmin">
+                                <a class="nav-link" href="/">TopLista</a>
+                            </li>
+                            <li :class="checkIfAdminTab()" v-if="user.isAdmin">
+                                <a class="nav-link" href="/Admin/Index">Admin</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <a v-if="user.username == null || user.username == ''" class="btn btn-outline-secondary navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" href="/LogIn/Index">
+                            Login
+                        </a>
+                        <div v-else class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                            Dobrodosli {{user.username}}!
+                        </div>
+                        <a v-if="user.username != null && user.username != ''" class="btn btn-outline-secondary ml-5 navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" @@click="logOut()">
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        @RenderBody()
+    </div>
+    <script src="~/js/Shared/Layout.js?t=20201207"></script>
+</body>
+</html>

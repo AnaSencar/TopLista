@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div id="top_lista" v-if="showData">
+        <div class="card shadow p-3 mb-5 bg-white rounded">
+            <div class="card-body">
+                <div class="row justify-content-between mb-3">
+                    <h2>Top Lista</h2>
+                    <div>
+                        <button class="btn btn-outline-secondary" @@click="createNewZapis()">
+                            Dodaj novo vrijeme
+                        </button>
+                    </div>
+                </div>
+                <template v-if="zapisi.length > 0">
+                    <div class="row mb-2">
+                        <div class="vertical_align_center">
+                            Prikazi broj zapisa:
+                        </div>
+                        <select class="form-control col-2 ml-2" v-model="filter.numberOfRecords" @@change="getZapisi()">
+                            <option :value="null">Svi</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <template v-if="!user.isAdmin">
+                                    <th style="width:10%;text-align:center">Poredak</th>
+                                    <th style="width:30%">Ime</th>
+                                    <th style="width:30%">Prezime</th>
+                                    <th style="width:30%">Vrijeme (h:m:s)</th>
+                                </template>
+                                <template v-else>
+                                    <th style="width:10%;text-align:center">Poredak</th>
+                                    <th style="width:30%">Ime</th>
+                                    <th style="width:30%">Prezime</th>
+                                    <th style="width:20%">Vrijeme (h:m:s)</th>
+                                    <th style="width:10%"></th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(zapis, index) in zapisi">
+                                <td class="align-middle text-center">
+                                    <template v-if="index === 0">
+                                        🥇
+                                    </template>
+                                    <template v-else-if="index === 1">
+                                        🥈
+                                    </template>
+                                    <template v-else-if="index === 2">
+                                        🥉
+                                    </template>
+                                    <template v-else>
+                                        {{index + 1}}
+                                    </template>
+                                </td>
+                                <td class="align-middle">
+                                    {{zapis.ime}}
+                                </td>
+                                <td class="align-middle">
+                                    {{zapis.prezime}}
+                                </td>
+                                <td class="align-middle">
+                                    {{zapis.vrijeme}}
+                                </td>
+                                <template v-if="user.isAdmin">
+                                    <td>
+                                        <button class="btn btn-outline-danger" @@click="denyZapisClick(zapis)">
+                                            Obriši
+                                        </button>
+                                    </td>
+                                </template>
+                            </tr>
+                        </tbody>
+                    </table>
+                </template>
+                <template v-else>
+                    Još nema unesenih vremena
+                </template>
+            </div>
+        </div>
+
+        <div class="modal fade" id="createZapis">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Dodaj novo vrijeme
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-2">
+                            <div class="col-3 vertical_align_center">
+                                Ime
+                            </div>
+                            <div class="col-9">
+                                <input type="text" :class="{ 'is-invalid' : $v.zapisForCreate.ime.$error, 'form-control' : true }" v-model="$v.zapisForCreate.ime.$model" />
+                                <div v-if="!$v.zapisForCreate.ime.required && $v.zapisForCreate.ime.$error" class="invalid-feedback">
+                                    Ime je obavezno
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-3 vertical_align_center">
+                                Prezime
+                            </div>
+                            <div class="col-9">
+                                <input type="text" :class="{ 'is-invalid' : $v.zapisForCreate.prezime.$error, 'form-control' : true }" v-model="$v.zapisForCreate.prezime.$model" />
+                                <div v-if="!$v.zapisForCreate.prezime.required && $v.zapisForCreate.prezime.$error" class="invalid-feedback">
+                                    Prezime je obavezno
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-3 vertical_align_center">
+                                Vrijeme
+                            </div>
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <input type="number" style="width:80%;display:inline" :class="{ 'is-invalid' : $v.zapisForCreate.sat.$error, 'form-control' : true }" v-model.number="$v.zapisForCreate.sat.$model" /> h
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="number" style="width:80%;display:inline" :class="{ 'is-invalid' : $v.zapisForCreate.min.$error, 'form-control' : true }" v-model.number="$v.zapisForCreate.min.$model" /> m
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="number" style="width:80%;display:inline" :class="{ 'is-invalid' : $v.zapisForCreate.sec.$error, 'form-control' : true }" v-model.number="$v.zapisForCreate.sec.$model" /> s
+                                    </div>
+                                    <div v-if="$v.zapisForCreate.sat.$error" class="invalid-feedback d-block pl-3">
+                                        Sat ne smije biti negativan
+                                    </div>
+                                    <div v-if="$v.zapisForCreate.min.$error" class="invalid-feedback d-block pl-3">
+                                        Minute ne smiju biti negativane
+                                    </div>
+                                    <div v-if="$v.zapisForCreate.sec.$error" class="invalid-feedback d-block pl-3">
+                                        Sekunde ne smiju biti negativane
+                                    </div>
+                                    <div v-if="showTimeValidation" class="invalid-feedback d-block pl-3">
+                                        Vrijeme mora biti uneseno
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-secondary" @@click="saveZapis()">Spremi</button>
+                        <button class="btn btn-outline-danger" @@click="cancelCreationOfZapis()">Odustani</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="denyZapis">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Potvrda odbacivanja zapisa
+                    </div>
+                    <div class="modal-body">
+                        Da li ste sigurni da želite odbaciti zapis?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-secondary" @@click="denyZapis()">Potvrdi</button>
+                        <button class="btn btn-outline-danger" @@click="cancelDenyZapisClicked()">Odustani</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script src="~/js/TopLista/Index.js?t=20201206"></script>
